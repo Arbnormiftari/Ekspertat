@@ -88,6 +88,21 @@ class UserRepository{
         $statement->execute([$idUser,$idCourse]);
         echo "<script>alert('CourseUser has been inserted succesfully!')</script>";
     }
+    function removeUserCourse($user,$course){
+        $conn=$this->connection;
+
+        $idUser=$user->getId();
+        $idCourse=$course->getId();
+        //$name=$course->getName();
+        //$price=$course->getPrice();
+        //$description=$course->getDescription();
+        //$image=$course->getImage();
+
+        $sql=" DELETE FROM usercourse WHERE User_ID=? AND Product_ID=?";
+        $statement=$conn->prepare($sql);
+        $statement->execute([$idUser,$idCourse]);
+        echo "<script>alert('CourseUser has been inserted succesfully!')</script>";
+    }
     function getAllCourseUser($id){
         $conn=$this->connection;
         
@@ -101,27 +116,24 @@ class UserRepository{
         $courses = $statement->fetchAll();
         return $courses;
     }
-    function getAllCoursesNotUser($user){
+    function getAllCoursesNotUser($id){
         $conn=$this->connection;
-        $idUser=$user->getId();
+        
 
-        $sql= "SELECT * FROM courses c inner join
-               usercourse uc ON
-               c.Product_ID=uc.Product_ID
-               where not uc.User_ID='$idUser'
-        ";
+        $sql= "SELECT * FROM courses 
+               where Product_ID not  in(
+                   Select Product_ID from usercourse where User_ID='$id'
+               )";
+        
 
         $statement= $conn->query($sql);
         $courses = $statement->fetchAll();
         return $courses;
     }
-    function deleteCourseByID($Product_ID){
-        $conn=$this->connection;
+    
+    function removeCourseAcc(){
 
-        $sql=" DELETE FROM courses WHERE Product_ID=?";
-        $statement=$conn->prepare($sql);
-        $statement->execute([$Product_ID]);
-        echo "<script>alert('Course has been deleted succesfully!')</script>";
+
     }
 }
 //$userRepo= new UserRepository();

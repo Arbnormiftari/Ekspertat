@@ -64,6 +64,7 @@ class courseRepository{
         $statement->execute([$Product_ID]);
         echo "<script>alert('Course has been deleted succesfully!')</script>";
     }
+    
 }
 
 ?>
